@@ -1,0 +1,6 @@
+.bg{
+    background-image: url('../../../assets/home/featured.jpg');
+    background-size: cover;
+    background-blend-mode: darken;
+    
+}
