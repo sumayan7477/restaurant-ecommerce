@@ -1,7 +1,52 @@
+// npm init -y
+// npm i express cors dotenv mongodb
+
+/*** Basic server
+ * 
+ * const express = require('express');
+const app = express();
+const cors = require('cors');
+const port = process.env.PORT || 5000;
+
+// middlewars
+app.use(cors());
+app.use(express.json());
+
+app.get('/',(req,res)=>{
+    res.send('Time Sheet')
+})
+
+app.listen(port,()=>{
+    console.log(`time sheet server port ${port}`);
+})*/ 
+
+
+
 const express = require("express");
 const cors = require("cors");
 const app = express();
 var jwt = require("jsonwebtoken");
+
+// sumaiya
+// "headers": [
+//     {
+//       "source": "/(.*)",
+//       "headers": [
+//         {
+//           "key": "Access-Control-Allow-Origin",
+//           "value": "*"
+//         },
+//         {
+//           "key": "Access-Control-Allow-Methods",
+//           "value": "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+//         },
+//         {
+//           "key": "Access-Control-Allow-Headers",
+//           "value": "Content-Type, Authorization"
+//         }
+//       ]
+//     }
+//   ]
 
 //********** */ enviroment confiq https://www.npmjs.com/package/dotenv  and creat a .env file and ignore it
 require("dotenv").config();
@@ -22,26 +67,31 @@ const mg = mailgun.client({
 // port diclaration
 const port = process.env.PORT || 5000;
 
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://bistro-boss-badcf.web.app",
-      "https://bistro-boss-badcf.firebaseapp.com",
-    ], // The frontend URL
-    credentials: true,
-    methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"], // Allowing required HTTP methods
-    allowedHeaders: ["Content-Type", "Authorization"], // Allowing headers like Content-Type, Authorization
-  })
-);
+// app.use(
+//   cors({
+//     origin: [
+//       "http://localhost:5173",
+//       "https://bistro-boss-badcf.web.app",
+//       "https://bistro-boss-badcf.firebaseapp.com",
+//     ], // The frontend URL
+//     credentials: true,
+//     methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"], // Allowing required HTTP methods
+//     allowedHeaders: ["Content-Type", "Authorization"], // Allowing headers like Content-Type, Authorization
+//   })
+// );
+app.use(cors());
 app.options("*", cors()); // Allow preflight requests for all routes
 
 // middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
 
 //********** */ GO to mongodb and creat a new database -> creat anew collwction-> upload data -> creat anew user from database access -> copy the user and passssword  and add them in the .env file -> goto data base and -> connect-> drivers-> and copy ht e code and pest it herre ->make username and passsword dynamic from .env file
 
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+const { default: axios } = require("axios");
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.bbv2s.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -361,6 +411,7 @@ async function run() {
       res.send(result);
     });
 
+    
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     // console.log(
